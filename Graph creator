@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import requests
+
+# Step 1: Download CSV file
+url = 'https://example.com/sample.csv'  # Replace this with the actual URL
+csv_file = 'downloaded_data.csv'
+
+response = requests.get(url)
+with open(csv_file, 'wb') as f:
+    f.write(response.content)
+
+# Step 2: Load the CSV
+df = pd.read_csv(csv_file)
+
+# Step 3: Extract columns B and C (index 1 and 2)
+population = df.iloc[:, 1]
+sales = df.iloc[:, 2]
+
+# Step 4: Plot Population vs Sales
+plt.figure(figsize=(8, 6))
+plt.scatter(population, sales, color='blue', alpha=0.6)
+plt.title('Population vs Sales')
+plt.xlabel('Population')
+plt.ylabel('Sales')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
