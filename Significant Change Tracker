@@ -1,0 +1,33 @@
+# Statistically significant tracker!
+
+import pandas as pd
+from scipy.stats import pearsonr
+
+def compare_relationships(original_csv, updated_csv):
+    # Load both datasets
+    df_original = pd.read_csv(original_csv)
+    df_updated = pd.read_csv(updated_csv)
+
+    # Extract Population and Sales columns
+    pop_orig = df_original.iloc[:, 1]
+    sales_orig = df_original.iloc[:, 2]
+
+    pop_new = df_updated.iloc[:, 1]
+    sales_new = df_updated.iloc[:, 2]
+
+    # Calculate Pearson correlation coefficients and p-values
+    corr_orig, pval_orig = pearsonr(pop_orig, sales_orig)
+    corr_new, pval_new = pearsonr(pop_new, sales_new)
+
+    # Display results
+    print(f"Original correlation: r = {corr_orig:.3f}, p = {pval_orig:.4f}")
+    print(f"Updated correlation:  r = {corr_new:.3f}, p = {pval_new:.4f}")
+
+    # Compare significance
+    if abs(corr_orig - corr_new) > 0.1 and (pval_new > 0.05 or pval_orig > 0.05):
+        print("⚠️ Significant change detected (p > 0.05) or notable difference in correlation.")
+    else:
+        print("✅ No significant change detected in relationship.")
+
+# Example usage:
+compare_relationships('original_data.csv', 'updated_data.csv')
